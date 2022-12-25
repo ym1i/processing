@@ -13,17 +13,17 @@ def setup():
     global dim, s, a, num, max_num, travelers, pallet, cp5, slider_a, slider_s
     
     cp5 = ControlP5(this)
-    slider_a = cp5.addSlider('a').setPosition(10, 10).setSize(200,10).setRange(PI / 4, 0).setValue(PI / 8).setNumberOfTickMarks(20)
-    slider_s = cp5.addSlider('s').setPosition(10, 30).setSize(200,10).setRange(1, 0.01).setValue(0.73).setNumberOfTickMarks(20)
+    slider_a = cp5.addSlider('a').setPosition(10, 10).setSize(200,10).setRange(0.1, PI/ 2).setValue(PI / 4).setNumberOfTickMarks(30)
+    slider_s = cp5.addSlider('s').setPosition(10, 30).setSize(200,10).setRange(0.01, 1).setValue(0.73).setNumberOfTickMarks(30)
     
     dim = 500
     s = 0.73
-    a = random(0.2, TWO_PI-0.2)
+    a = PI / 4
     num = 0
-    max_num = 1000
+    max_num = 3000
     travelers = []
     pallet = Palette(512)
-    pallet.take_colors('okcomputer.jpg')
+    pallet.take_colors('pantone.png')
     
     size(500, 500)
     background(255)
@@ -39,7 +39,7 @@ def draw():
             
     for k in range(20):
         for i in range(num):
-            if frameCount % 10000 == 0:
+            if frameCount % 50 == 0:
                 travelers[i].update_params(slider_a.getValue(), slider_s.getValue())
             travelers[i].draw()
             
@@ -48,6 +48,6 @@ def draw():
     
 
 def mousePressed():
-    print 'mousePressed() '
+    background(255)
     
     

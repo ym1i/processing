@@ -19,12 +19,16 @@ class TravelerHenon(object):
         self.x = t
         fuzz_x = random(-0.004, 0.004)
         fuzz_y = random(-0.004, 0.004)
-        px = fuzz_x + (self.x / self.s + self.offset_x) * self.dim
-        py = fuzz_y + (self.y / self.s + self.offset_y) * self.dim
+        # px = fuzz_x + (self.x / self.s + self.offset_x) * self.dim
+        # py = fuzz_y + (self.y / self.s + self.offset_y) * self.dim
+        px = (self.x / self.s + .5) * self.dim
+        py = (self.y / self.s + .5) * self.dim
         
         if px > 0 and px < self.dim and py > 0 and py < self.dim:
             stroke(red(self.c), green(self.c), blue(self.c), 56)
-            point((self.x / self.s + .5) * self.dim, (self.y / self.s + .5) * self.dim)
+            point(px, py)
+        # stroke(red(self.c), green(self.c), blue(self.c), 56)
+        # point((self.x / self.s + .5) * self.dim, (self.y / self.s + .5) * self.dim)
             
         
     def create_particle(self, colors, num_pal):
