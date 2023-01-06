@@ -9,23 +9,23 @@ class Liquid(object):
         self.c = c
         
         
-    def is_inside(self, x, y):
-        if x > self.x and x < self.x + self.w and y > self.y and y < self.y + self.h:
+    def is_inside(self, p):
+        if p.loc.x > self.x and p.loc.x < self.x + self.w and p.loc.y > self.y and p.loc.y < self.y + self.h:
             return True
         return False
 
-    def drag(self, v):
-        speed = v.mag()
+    def drag(self, p):
+        speed = p.vel.mag()
         magnitude = self.c * sq(speed)
-        _drag = v.get()
-        _drag.mult(-1)
-        _drag.normalize()
-        _drag.mult(magnitude)
+        force = p.vel.get()
+        force.mult(-1)
+        force.normalize()
+        force.mult(magnitude)
         
-        return _drag
+        return force
     
     
     def display(self):
         noStroke()
-        fill(175)
+        fill(200, 100)
         rect(self.x, self.y, self.w, self.h)

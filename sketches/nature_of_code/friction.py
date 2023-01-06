@@ -6,9 +6,9 @@ class Friction(object):
         self.N = 1
         
         
-    def friction(self, v):
+    def friction(self, p):
         magnitude = self.c * self.N
-        force = v.get()
+        force = p.vel.get()
         force.mult(-1)
         force.normalize()
         force.mult(magnitude)
