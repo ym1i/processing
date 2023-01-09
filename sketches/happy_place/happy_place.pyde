@@ -58,9 +58,9 @@ def make_friends():
     for i in range(n_friends * 2):
         a = floor(random(n_friends))
         b = floor(a + random(22)) % n_friends
-        if b >= n_friends or b < 0:
-            b = 0
-            print('b >= num or b < 0')
+        # if b >= n_friends or b < 0:
+        #     b = 0
+        #     print('b >= num or b < 0')
         if a != b:
             friends[a].connect_to(b)
             friends[b].connect_to(a)

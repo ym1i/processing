@@ -15,7 +15,7 @@ class Particle(object):
         self.vel.add(self.acc)
         self.loc.add(self.vel)
         self.acc.mult(0)
-        self.lifespan -= -2.0
+        self.lifespan -= 0.5
         
     def apply_force(self, _force):
         force = _force.get()
@@ -24,8 +24,8 @@ class Particle(object):
         
     def display(self):
         stroke(0, self.lifespan)
-        fill(175, self.lifespan)
-        ellipse(self.loc.x, self.loc.y, 8, 8)
+        fill(200, self.lifespan)
+        ellipse(self.loc.x, self.loc.y, self.mass * 2, self.mass * 2)
         
     def is_dead(self):
         return True if self.lifespan < 0 else False

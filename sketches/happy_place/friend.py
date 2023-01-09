@@ -45,18 +45,24 @@ class Friend(object):
     
     
     def expose(self):
+        
         for dx in range(-2, 3):
-            a = 0.5 - abs(dx) / 5.0
-            stroke(0, 256 * a)
+            a = 0.5 - abs(dx) / 5.0    # 0.1, 0.3, 0.5, 0.3, 0.1
+            stroke(0, 256 * a)         # 25, 75, 128, 75, 25
             point(self.x + dx, self.y)
-            stroke(255, 256 * a)
+            #stroke(255, 256 * a)
+            stroke(200, 256 * a)
             point(self.x + dx - 1, self.y - 1)
+        
+            
         for dy in range(-2, 3):
             a = 0.5 - abs(dy) / 5.0
             stroke(0, 256 * a)
             point(self.x, self.y + dy)
-            stroke(255, 256 * a)
+            #stroke(255, 256 * a)
+            stroke(200, 256 * a)
             point(self.x - 1, self.y + dy - 1)
+    
         
     
     def expose_connections(self, friends):

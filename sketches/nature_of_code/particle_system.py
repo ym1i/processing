@@ -7,10 +7,15 @@ class ParticleSystem(object):
         self.particles = []
         
     def add_particle(self):
-        self.particles.append(Particle(self.origin))
+        self.particles.append(Particle(self.origin, random(10)))
         
     def apply_force(self, force):
         for particle in self.particles:
+            particle.apply_force(force)
+            
+    def apply_gravity(self, gravity):
+        for particle in self.particles:
+            force = gravity.gravity(particle)
             particle.apply_force(force)
             
     def apply_attractor(self, attractor):
@@ -34,7 +39,7 @@ class ParticleSystem(object):
             particle.apply_force(force) 
             
     def run(self):
-        self.particles = [p for p in self.particles if p.lifespan > 0]
+        self.particles = [p for p in self.particles if not p.is_dead()]
         for particle in self.particles:
             particle.run()
             
