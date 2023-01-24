@@ -1,5 +1,5 @@
 
-class Koch():
+class Renderer():
     
     def __init__(self, command, len, theta):
         self.command = command
@@ -13,7 +13,7 @@ class Koch():
             if c == 'F':
                 line(0, 0, self.len, 0)
                 translate(self.len, 0)
-            elif c == '':
+            elif c == 'f':
                 translate(self.len, 0)
             elif c == '+':
                 rotate(-self.theta)
