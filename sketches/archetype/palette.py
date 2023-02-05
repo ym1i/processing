@@ -6,11 +6,12 @@ class Palette():
         self.colors = []
         
         self.spider_king()
+        self.shape = self.random_color()
     
     def spider_king(self):
         self.shade = color(5, 5, 5)
         self.frame = color(240, 219, 188)
-        self.colors.extend([color(242, 219, 188), color(230, 63, 71), color(237, 129, 126), color(1, 121, 156), color(0, 103, 73)])
+        self.colors = [color(242, 219, 188), color(230, 63, 71), color(237, 129, 126), color(1, 121, 156), color(0, 103, 73)]
         
     
     def mono(self):
@@ -21,7 +22,7 @@ class Palette():
    
     def random_color(self):
         return self.colors[int(random(len(self.colors)))]
-    
+            
     
     def golid_colors(self):
         self.colors.extend([color(231, 94, 96), color(249, 190, 82), color(89,180,180), color(197,149,197)])
