@@ -1,4 +1,5 @@
-class Section3D():
+
+class Section():
     
     def __init__(self, x, y, z, w, h, d):
         self.x = x
