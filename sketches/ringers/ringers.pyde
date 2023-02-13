@@ -15,10 +15,10 @@ def draw():
 
 def init():
     global pegs
-    layout = 'grid_3'
+    layouts = ['grid_3', 'grid_4', 'grid_5', 'grid_6', 'tiled_23', 'tiled_32', 'tiled_34', 'tiled_43', 'tiled_45', 'tiled_54']
     radius = 30
-    style = 'bulls_2'
-    pegs = PegSystem(layout, style, radius)  
+    style = 'solid'
+    pegs = PegSystem(layouts[7], style, radius)  
     pegs.set_layout()
-    pegs.wrap()
+    pegs.w_rap()
     
