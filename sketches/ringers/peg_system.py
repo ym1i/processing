@@ -3,16 +3,17 @@ from peg import Peg
 
 class PegSystem():
     
-    def __init__(self, layout, style, size):
+    def __init__(self, layout, style, scaling):
         self.pegs = []
         self.layout = layout
         self.style = style
-        self.size = size
+        self.scaling = scaling
         self.probability = random(0.05, 0.5)
         self.n_cols = 0
         self.n_rows = 0
         self.col_width = 0
         self.colors = [color(0, 0, 0), color(255, 255, 255), color(248, 198, 54), color(45, 132, 194)]
+        self.styles = ['solid', 'bulls_1', 'bulls_2', 'bulls_3']
         
     
     def add_peg(self, x, y, r, style, c1, c2):
@@ -63,34 +64,72 @@ class PegSystem():
             
     
     def grid_layout(self, n_grid):
-        x = width / (n_grid + 1)
-        y = height / (n_grid + 1)
-        self.col_width = x
+        col_w = width / (n_grid + 1)
+        row_h = height / (n_grid + 1)
+        r = col_w * random(0.05, 0.3)
+        self.col_width = col_w
+        
         for i in range(n_grid):
+            scale_x = self.scaling_map(i, n_grid-1, r)
+                
             for j in range(n_grid):
                 if random(1) < self.probability:
                     continue
-                self.add_peg(x * (i + 1), y * (j + 1), self.size, self.style, self.colors[0], self.colors[0])
+                scale_y = self.scaling_map(j, n_grid-1, r)
+                
+                scaling = 0 if i == 0 or j == 0 or i == n_grid - 1 or j == n_grid - 1 else scale_x + scale_y
+                style = self.random_style()
+                self.add_peg(col_w * (i + 1), row_h * (j + 1), r + scaling, style, self.colors[0], self.colors[1])
                 
                 
     def tiled_layout(self, tile_1, tile_2):
     
         n_cols = tile_1 if tile_1 > tile_2 else tile_2
-        x = width / (n_cols + 1)
-        self.col_width = x
+        col_w = width / (n_cols + 1)
+        r = col_w * random(0.05, 0.3)
+        self.col_width = col_w
         for i in range(n_cols):
+            scale_x = self.scaling_map(i, n_cols - 1, r)
+            # a = map(i, 0, n_cols - 1, 0, PI)
+            # if self.scaling == 'bigger_near_center':
+            #     scale_x = (r / 3) * sin(a)
+            # elif self.scaling == 'smaller_near_center':
+            #     scale_x = -(r / 3) * sin(a)
+                
             if i % 2 == 0:
-                y = height / (tile_1 + 1)
+                row_h = height / (tile_1 + 1)
                 for j in range(tile_1):
                     if random(1) < self.probability:
                         continue
-                    self.add_peg(x * (i + 1), y * (j + 1), self.size, self.style, self.colors[0], self.colors[0])
+                    scale_y = self.scaling_map(j, tile_1 - 1, r)
+                    # a = map(j, 0, tile_1 - 1, 0, PI)
+                    # if self.scaling == 'bigger_near_center':
+                    #     scale_y = (r / 3) * sin(a) 
+                    # elif self.scaling == 'smaller_near_center':
+                    #     scale_y = -(r / 3) * sin(a)
+                        
+                    # scale_x = 0 if j == 0 or j == tile_1-1 else scale_x
+                    # scale_y = 0 if i == 0 or i == n_cols-1 else scale_y
+                    scaling = 0 if i == 0 or j == 0 or i == n_cols - 1 or j == tile_1 - 1 else scale_x + scale_y
+                    style = self.random_style()
+                    self.add_peg(col_w * (i + 1), row_h * (j + 1), r + scaling, style, self.colors[0], self.colors[1])
             else:
-                y = height / (tile_2 + 1)
+                row_h = height / (tile_2 + 1)
                 for j in range(tile_2):
                     if random(1) < self.probability:
                         continue
-                    self.add_peg(x * (i + 1), y * (j + 1), self.size, self.style, self.colors[0], self.colors[0])
+                    scale_y = self.scaling_map(j, tile_2 - 1, r)
+                    # a = map(j, 0, tile_2 - 1, 0, PI)
+                    # if self.scaling == 'bigger_near_center':
+                    #     scale_y = (r / 3) * sin(a) 
+                    # elif self.scaling == 'smaller_near_center':
+                    #     scale_y = -(r / 3) * sin(a)
+                        
+                    # scale_x = 0 if j == 0 or j == tile_2-1 else scale_x
+                    # scale_y = 0 if i == 0 or i == n_cols-1 else scale_y
+                    scaling = 0 if i == 0 or j == 0 or i == n_cols - 1 or j == tile_2 - 1 else scale_x + scale_y
+                    style = self.random_style()
+                    self.add_peg(col_w * (i + 1), row_h * (j + 1), r + scaling, style, self.colors[0], self.colors[1])
                     
     
     def wrap(self):
@@ -99,6 +138,8 @@ class PegSystem():
         for peg in self.pegs:
             if random(1) < prob:
                 wrapped.append(peg)
+        if not wrapped:
+            wrapped.append(self.pegs[0])
         
         beginShape()
         fill(self.colors[2])
@@ -183,56 +224,74 @@ class PegSystem():
         
         endShape(CLOSE)
         
+                
+    def random_style(self):
+        rand = random(1)
+        if rand < 0.05:
+            return self.styles[1]
+        elif rand < 0.1:
+            return self.styles[2]
+        elif rand < 0.15:
+            return self.styles[3]
+        else:
+            return self.styles[0]
+        
     
+    def scaling_map(self, i, n, radius):
+        a = map(i, 0, n, 0, PI)
+        if self.scaling == 'bigger_near_center':
+            return (radius / 3) * sin(a)
+        elif self.scaling == 'smaller_near_center':
+            return -(radius / 3) * sin(a)
+        
     
-    def w_rap(self):
-        n_pegs = len(self.pegs)
-        n_wrap = n_pegs
-        start = int(random(n_pegs))
-        current = start
-        prev = -99
-        
-        beginShape(QUAD)
-        fill(self.colors[2])
-        vertex(self.pegs[current].x, self.pegs[current].y)
-        
-        while n_wrap > 0:
-            r = random(1)
-            if r < 0.125:
-                next = current - 1
-            elif r < 0.25:
-                next = current + self.n_rows - 1
-            elif r < 0.375:
-                next = current + self.n_rows
-            elif r < 0.5:
-                next = current + self.n_rows + 1
-            elif r < 0.625:
-                next = current + 1
-            elif r < 0.75:
-                next = current - self.n_rows + 1
-            elif r < 0.875:
-                next = current - self.n_rows
-            else:
-                next = current - self.n_rows - 1
-            
-            next %= n_pegs
-            if next == prev:
-                continue
-        
-            # vertex(self.pegs[current].x, self.pegs[current].y)
-            vertex(self.pegs[next].x, self.pegs[next].y)
-            
-            if next == start:
-                break
-            
-            prev = current
-            current = next
-            n_wrap -= 1
-            
-        endShape(CLOSE)
-            
-            
-        
     def render(self):
         for peg in self.pegs:
             peg.render()
+            
+            
+    # def w_rap(self):
+    #     n_pegs = len(self.pegs)
+    #     n_wrap = n_pegs
+    #     start = int(random(n_pegs))
+    #     current = start
+    #     prev = -99
+        
+    #     beginShape(QUAD)
+    #     fill(self.colors[2])
+    #     vertex(self.pegs[current].x, self.pegs[current].y)
+        
+    #     while n_wrap > 0:
+    #         r = random(1)
+    #         if r < 0.125:
+    #             next = current - 1
+    #         elif r < 0.25:
+    #             next = current + self.n_rows - 1
+    #         elif r < 0.375:
+    #             next = current + self.n_rows
+    #         elif r < 0.5:
+    #             next = current + self.n_rows + 1
+    #         elif r < 0.625:
+    #             next = current + 1
+    #         elif r < 0.75:
+    #             next = current - self.n_rows + 1
+    #         elif r < 0.875:
+    #             next = current - self.n_rows
+    #         else:
+    #             next = current - self.n_rows - 1
+            
+    #         next %= n_pegs
+    #         if next == prev:
+    #             continue
+        
+    #         # vertex(self.pegs[current].x, self.pegs[current].y)
+    #         vertex(self.pegs[next].x, self.pegs[next].y)
+            
+    #         if next == start:
+    #             break
+            
+    #         prev = current
+    #         current = next
+    #         n_wrap -= 1
+            
+    #     endShape(CLOSE)
