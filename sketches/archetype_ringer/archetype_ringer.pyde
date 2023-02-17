@@ -56,10 +56,12 @@ def make_cells():
     global sections
     layouts = ['grid_3', 'grid_4', 'grid_5']
     scalings = ['uniform', 'bigger_near_center', 'smaller_near_center']
+    colors = [color(0, 0, 0), color(255, 255, 255), color(248, 198, 54), color(45, 132, 194), color(211, 51, 59)]
+    bg_colors = [color(255, 255, 255), color(248, 198, 54), color(45, 132, 194), color(211, 51, 59)]
     
     for section in sections:
-        n_cols = int(random(1, section.w / 80))
-        n_rows = int(random(1, section.h / 80))
+        n_cols = int(random(1, section.w / 50))
+        n_rows = int(random(1, section.h / 50))
         cell_w = section.w / n_cols
         cell_h = section.h / n_rows
         layout = layouts[int(random(len(layouts)))]
@@ -67,26 +69,17 @@ def make_cells():
         scaling = scalings[0]
         n_grid = int(random(3, 6)) 
         radius = cell_w / (n_grid + 1) * random(0.1, 0.3) if cell_w < cell_h else cell_h / (n_grid + 1) * random(0.1, 0.3)
+        body = colors[int(random(5))]
+        bg = bg_colors[int(random(4))]
         
         for row in range(n_rows):
             for col in range(n_cols):
-                section.cells.append(Cell(section.x + cell_w * col, section.y + cell_h * row, cell_w, cell_h, layout, scaling, n_grid, radius))
-                
-        # for cell in section.cells:
-        #     cell.partitions.append(Partition(cell.x, cell.y, cell.w, cell.h))
+                section.cells.append(Cell(section.x + cell_w * col, section.y + cell_h * row, cell_w, cell_h, layout, scaling, n_grid, radius, body, bg))
         
 
 def render():
     noFill()
     for section in sections:
-        stroke(0)
-        strokeWeight(2)
-        fill(random(255), random(255), random(255), 100)
-        rect(section.x, section.y, section.w, section.h)
-        
         for cell in section.cells:
-            stroke(255, 0, 0)
-            strokeWeight(1)
-            noFill()
-            rect(cell.x, cell.y, cell.w, cell.h)
+            cell.render()
             cell.pegs.render()
